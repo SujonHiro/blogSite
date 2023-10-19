@@ -5,4 +5,5 @@ const router=express.Router();
 
 
 router.post("/signup",userController.userCreate)
+router.post("/signin",userController.loginUser)
 export default router;
