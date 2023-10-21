@@ -1,5 +1,6 @@
 import userService from "./user.services.js";
 
+
 //signup
 const userCreate=async(req,res)=>{
     const userData=req.body;
@@ -22,4 +23,28 @@ const loginUser=async(req,res)=>{
     });
 }
 
-export default {userCreate,loginUser}
+
+//Get Users
+const getUsers=async(req,res)=>{
+    const userGetData=req.user;
+    const users=await userService.getUsersService(userGetData);
+    res.status(200).json({
+        success:true,
+        data:users
+    })
+}
+
+
+const getSpecificUser=async(req,res)=>{
+    const userSpecificData=req.user;
+    const userEmail=req.params.email;
+    const user=await userService.getSpecificUserService(userSpecificData,userEmail);
+
+    res.status(200).json({
+        success:true,
+        data:user
+    })
+}
+
+
+export default {userCreate,loginUser,getUsers,getSpecificUser};

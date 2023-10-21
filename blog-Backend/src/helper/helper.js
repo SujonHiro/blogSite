@@ -1,6 +1,10 @@
 import jsonwebtoken from "jsonwebtoken";
 
-const createToken=(payload,secret,expiresIn)=>{
+export const createToken=(payload,secret,expiresIn)=>{
  return jsonwebtoken.sign(payload,secret,{expiresIn});   
 }
-export default createToken;
+
+export const verifyToken=(token,secret)=>{
+    return jsonwebtoken.verify(token,secret);
+}
+

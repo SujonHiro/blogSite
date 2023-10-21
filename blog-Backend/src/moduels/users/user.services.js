@@ -1,6 +1,9 @@
 import userModel from "./user.model.js"
-import  createToken from "../../helper/helper.js";
+import  {createToken} from "../../helper/helper.js";
 
+
+
+//signup service
 const userCreateService = async (userData) => {
     try {
         const existingUser = await userModel.findOne({ email: userData.email });
@@ -15,7 +18,7 @@ const userCreateService = async (userData) => {
     }
 };
 
-
+//Login Service
 const userLoginService = async (loginData) => {
     const user=await userModel.findOne({email:loginData.email});
     if(!user){
@@ -23,11 +26,35 @@ const userLoginService = async (loginData) => {
     }
     if(user.password===loginData.password){
         const  {email,role}=user;
-        const accsessToken=createToken({email,role},process.env.JWT_SECRET,"1h");
+        const accsessToken=createToken({email,role},process.env.JWT_SECRET,"1d");
         return {accsessToken}
     }else{
         throw new Error("Invalid password");
     }
 }
 
-export default { userCreateService,userLoginService };
+//get user service
+
+const getUsersService=async(userGetData)=>{
+    //console.log(userGetData);
+    if(userGetData.role!=="admin"){
+        return "You are not admin";
+    }
+    const getUserData=await userModel.find();
+    return getUserData;
+        
+}
+const getSpecificUserService=async(userSpecificData,userEmail)=>{
+    if(userSpecificData.role ==="admin"){
+        const userinfo=await userModel.findOne({email:userEmail});
+        return userinfo;
+    }
+    if(userSpecificData.email===userEmail){
+        const userinfo=await userModel.findOne({email:userEmail});
+        return userinfo;
+    }
+    return "Unauthorized Access";
+}
+
+
+export default { userCreateService,userLoginService,getUsersService,getSpecificUserService };
