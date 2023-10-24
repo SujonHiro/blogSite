@@ -1,5 +1,6 @@
 import userModel from "./user.model.js"
 import  {createToken} from "../../helper/helper.js";
+    
 
 
 
@@ -35,17 +36,39 @@ const userLoginService = async (loginData) => {
 
 //get user service
 
-const getUsersService=async(userGetData)=>{
+const getUsersService=async(userGetData,searchText)=>{
+
+    let query={};
+    if(searchText){
+        query.$or=[
+            {name:{$regex:searchText,$options:"i"}},
+            {email:{$regex:searchText,$options:"i"}}
+        ];
+    }
+    const users=await userModel.find(query)
+    .select("-password")
+    .populate("writtenBlogs")
+        .populate("sharedBlogs")
+        .exec()
+
+        return users;
     //console.log(userGetData);
-    if(userGetData.role!=="admin"){
+    /* if(userGetData.role!=="admin"){
         return "You are not admin";
     }
     const getUserData=await userModel.find();
     return getUserData;
-        
+         */
 }
-const getSpecificUserService=async(userSpecificData,userEmail)=>{
-    if(userSpecificData.role ==="admin"){
+const getSpecificUserService=async(userEmail)=>{
+    const userinfo=await userModel.findOne({email:userEmail})
+    .select("-password")
+    .populate("writtenBlogs")
+    .populate("sharedBlogs")
+    .exec(); 
+    return userinfo;
+
+    /* if(userSpecificData.role ==="admin"){
         const userinfo=await userModel.findOne({email:userEmail});
         return userinfo;
     }
@@ -53,7 +76,7 @@ const getSpecificUserService=async(userSpecificData,userEmail)=>{
         const userinfo=await userModel.findOne({email:userEmail});
         return userinfo;
     }
-    return "Unauthorized Access";
+    return "Unauthorized Access"; */
 }
 
 

@@ -1,10 +1,15 @@
 import express from "express"
-const router=express.Router()
 import userRoutes from "../moduels/users/user.route.js";
+import blogRoutes from "../moduels/blogs/blog.route.js";
+const router=express.Router()
 const moduleRoutes=[{
     path:"/users",
     route:userRoutes
-    }
+    },
+    {
+    path:"/blogs",
+    route:blogRoutes
+}
 ]
 
 moduleRoutes.forEach(route=>{

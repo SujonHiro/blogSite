@@ -23,6 +23,11 @@ const userSchema=new mongoose.Schema({
         ref:"Blog",
         default:[]
     }],
+    sharedBlogs:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Blog",
+        default:[]
+    }],
     profilePic:{
         type:String,
         required:true
@@ -32,8 +37,13 @@ const userSchema=new mongoose.Schema({
         enum:["admin","user"],
         required:true,
         default:"user"
-}}
-,{timestamps:true,versionKey:false}
+    },
+    gems:{
+    type:Number,
+    required:true,
+    default:0
+    }
+},{timestamps:true,versionKey:false}
 );
 
 const User=mongoose.model("users",userSchema);
